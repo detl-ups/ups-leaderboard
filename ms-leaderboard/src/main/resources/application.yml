@@ -1,0 +1,13 @@
+spring:
+  port: 7089
+  servlet:
+    context-path: /score
+  datasource:
+    url: 'jdbc:mariadb://dtumbaco.online:3306/score'
+    username: bdscore
+    password: upsscore
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true

@@ -1,0 +1,10 @@
+
+.bestscore {
+    background-color: #6ee565;
+    color: black;
+}
+
+.badscore {
+    background-color: #da1f35;
+    color: white;
+}

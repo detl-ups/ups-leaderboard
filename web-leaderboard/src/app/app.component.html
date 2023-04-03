@@ -1,0 +1,209 @@
+<div class="content-section implementation" style="margin: 14dp">
+  <h2>Tabla de clasificaciones del curso</h2>
+
+  <div class="card">
+    <div class="card">
+      <div class="grid">
+        <div class="col-12 md:col-4">
+          <div class="flex justify-content-between">
+            <h4>Suba el archivo de texto plano descargado de la plataforma</h4>
+            <p-fileUpload
+              mode="basic"
+              name=""
+              chooseIcon="pi pi-upload"
+              [multiple]="false"
+              accept=".csv"
+              [auto]="true"
+              [customUpload]="true"
+              (uploadHandler)="onFileSelect($event)"
+            ></p-fileUpload>
+          </div>
+          <div *ngIf="showList">
+            <div class="grid align-items-center">
+              <div class="col-6">Columna Apellidos y Nombre</div>
+              <div class="col-6">
+                <p-multiSelect
+                  [options]="availableProducts"
+                  [selectionLimit]="2"
+                  [style]="{ width: '100%' }"
+                  [panelStyle]="{ 'max-width': '500px', 'min-width': '500px' }"
+                  [(ngModel)]="fieldsName"
+                  optionLabel="name"
+                ></p-multiSelect>
+              </div>
+            </div>
+            <div class="grid align-items-center">
+              <div class="col-6">Columna nota parciales a presentar</div>
+              <div class="col-6">
+                <p-multiSelect
+                  [options]="availableProducts"
+                  [style]="{ width: '100%' }"
+                  [panelStyle]="{ 'max-width': '500px', 'min-width': '500px' }"
+                  [(ngModel)]="fieldsScore"
+                  optionLabel="name"
+                ></p-multiSelect>
+              </div>
+            </div>
+            <div class="grid align-items-center">
+              <div class="col-6">Columna nota total del curso</div>
+              <div class="col-6">
+                <p-multiSelect
+                  [options]="availableProducts"
+                  [selectionLimit]="1"
+                  [style]="{ width: '100%', 'min-width': '100%' }"
+                  [panelStyle]="{ 'max-width': '500px', 'min-width': '500px' }"
+                  [(ngModel)]="fieldPieChart"
+                  optionLabel="name"
+                ></p-multiSelect>
+              </div>
+            </div>
+
+            <div class="grid align-items-center">
+              <div class="col-6">Nota minima</div>
+              <div class="col-6">
+                <p-inputNumber
+                  [(ngModel)]="minVal"
+                  [min]="0"
+                  [max]="100"
+                ></p-inputNumber>
+              </div>
+            </div>
+            <div class="grid align-items-center">
+              <div class="col-6">Nota deseable</div>
+              <div class="col-6">
+                <p-inputNumber
+                  [(ngModel)]="preferVal"
+                  [min]="minVal"
+                  [max]="100"
+                ></p-inputNumber>
+              </div>
+            </div>
+            <div class="grid align-items-center">
+              <div class="col-6">Codigo Curso</div>
+              <div class="col-6">
+                <div class="p-inputgroup">
+                  <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="codigoCurso"
+                    placeholder="Curso"
+                  />
+                  <button
+                    type="button"
+                    pButton
+                    pRipple
+                    (click)="generarCurso()"
+                    icon="pi pi-refresh"
+                    styleClass="p-button-warn"
+                  ></button>
+                </div>
+              </div>
+            </div>
+            <div class="grid align-items-center">
+              <div class="col-6 flex justify-content-evenly align-items-center">
+                <button
+                  pButton
+                  type="button"
+                  label="Generar archivo"
+                  (click)="generar()"
+                ></button>
+              </div>
+              <!-- <div class="col-6 flex justify-content-evenly align-items-center">
+                <button
+                  *ngIf="showUpload"
+                  pButton
+                  type="button"
+                  label="Publicar datos"
+                  (click)="subirDatos()"
+                ></button>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <div class="col-12 md:col-8">
+          <div
+            class="flex flex-column justify-content-evenly align-items-center"
+          >
+            <p-chart
+              [type]="chartType"
+              [data]="data"
+              *ngIf="showChart"
+              [options]="options"
+              width="40vw"
+              height="50vh"
+            ></p-chart>
+            <p-selectButton
+              *ngIf="showChart"
+              id="selectButtonChart"
+              [options]="optionGrafico"
+              [(ngModel)]="graficoSeleccionado"
+              optionLabel="label"
+              optionValue="value"
+              (onOptionClick)="onGraficoChange($event)"
+            ></p-selectButton>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p-table
+        *ngIf="showChart"
+        [value]="plainDataToExport"
+        [columns]="colsExport"
+        [tableStyle]="{ 'min-width': '40rem' }"
+        [scrollable]="true"
+        scrollHeight="400px"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-file-pdf"
+              label="Descargar PDF"
+              (click)="exportPdf()"
+              class="p-button-warning mr-2"
+              pTooltip="PDF"
+              tooltipPosition="bottom"
+            ></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              *ngIf="showUpload"
+              icon="pi pi-cloud-upload"
+              label="Subir datos"
+              (click)="subirDatos()"
+              class="p-button-info ml-auto"
+              pTooltip="Upload"
+              tooltipPosition="bottom"
+            ></button>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of colsExport">
+              {{ col.title }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <td
+              *ngFor="let col of columns"
+              [ngClass]="{
+                bestscore: rowData.rank < 4,
+                badscore: rowData.nota <= minVal
+              }"
+            >
+              {{ rowData[col.dataKey] }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

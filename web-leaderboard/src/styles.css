@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+#selectButtonChart .p-button {
+    font-size: 10px !important;
+
+}
+#selectButtonChart  {
+    margin-top: 10px ;
+
+}
